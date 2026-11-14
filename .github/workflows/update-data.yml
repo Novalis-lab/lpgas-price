@@ -1,0 +1,43 @@
+name: 料金データの更新
+
+on:
+  schedule:
+    # 毎週月曜 9:00（日本時間）。GitHub の時刻は UTC なので 0:00 と書く
+    - cron: "0 0 * * 1"
+  # Actions の画面の「Run workflow」ボタンから手動でもすぐ実行できる
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-data
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # 失敗したとき（読み込めない・数字がおかしい）は data.json を書き換えずに、ここで止まる
+      - name: 石油情報センターのページから最新の料金を取得
+        run: node scripts/update-data.mjs
+
+      # 数字が変わったときだけコミットする
+      - name: 変わっていればコミット
+        run: |
+          if git diff --quiet -- data.json; then
+            echo "変更なし。コミットしません。"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add data.json
+          git commit -m "料金データを更新（$(node -p "const d=require('./data.json');d.survey.year+'年'+d.survey.month+'月調査'")）"
+          git push
