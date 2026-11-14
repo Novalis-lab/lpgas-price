@@ -52,6 +52,7 @@
   function showError(msg, el) {
     $("error").textContent = msg;
     $("error").hidden = false;
+    $("result").hidden = true;   // 前の結果が残って見えないように
     ["usage", "bill"].forEach(function (id) { $(id).classList.toggle("bad", el === id); });
     if (el) $(el).focus();
   }
