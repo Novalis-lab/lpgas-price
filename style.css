@@ -1,0 +1,200 @@
+/* ============================================================
+   プロパンガス料金の目安（novalis）
+   フォントと角の丸みは common.css（novalis共通）で管理
+   ============================================================ */
+:root {
+  --bg: #0b0b0d;
+  --bg-2: #141417;
+  --text: #f2f0ea;
+  --muted: #8b8a86;
+  --dim: #5d5c58;
+  --line: rgba(255, 255, 255, 0.12);
+  --field: #08080a;
+  --main: #e8894a;          /* 炎のオレンジ */
+  --main-rgb: 232, 137, 74;
+  --blue: #6f9fd4;          /* 平均より安いとき */
+  --red: #e0605a;           /* 平均より高いとき */
+  --ink: #0b0b0d;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; color-scheme: dark; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+a { color: var(--main); }
+sup { font-size: 0.65em; line-height: 0; }
+
+/* ---------- 上のバー ---------- */
+.top {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center;
+  height: 52px;
+  padding: 0 max(16px, env(safe-area-inset-left));
+  background: rgba(11, 11, 13, 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+}
+.logo {
+  color: var(--text);
+  text-decoration: none;
+  font-family: var(--font-en);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  font-size: 15px;
+}
+
+/* ---------- 本文 ---------- */
+.wrap { max-width: 560px; margin: 0 auto; padding: 28px 16px 0; }
+h1 { margin: 0 0 10px; font-size: clamp(1.5rem, 6.4vw, 2rem); line-height: 1.35; }
+.sp { display: none; }
+@media (max-width: 420px) { .sp { display: inline; } }
+.lead { margin: 0 0 22px; color: var(--muted); font-size: 0.95rem; }
+.lead b { color: var(--text); }
+
+.card {
+  margin: 0 0 18px;
+  padding: 20px 18px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius, 8px);
+}
+h2 { margin: 0 0 6px; font-size: 1.1rem; }
+
+/* ---------- 入力 ---------- */
+.fld { margin-bottom: 20px; }
+.fld > label { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-weight: 700; }
+.step {
+  display: inline-grid; place-items: center;
+  width: 24px; height: 24px; border-radius: 50%;
+  background: var(--main); color: var(--ink);
+  font-family: var(--font-en); font-size: 12px; font-weight: 700;
+}
+.opt {
+  margin-left: 2px; padding: 1px 8px;
+  border: 1px solid var(--line); border-radius: 99px;
+  color: var(--muted); font-size: 11px; font-weight: 400;
+}
+select, input {
+  width: 100%;
+  height: 52px;
+  padding: 0 14px;
+  background: var(--field);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: var(--radius, 8px);
+  font: inherit;
+  font-size: 18px;   /* 16px 以上にして、iPhone で入力時に拡大されないように */
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+}
+select {
+  appearance: none; -webkit-appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position: calc(100% - 22px) 23px, calc(100% - 16px) 23px;
+  background-size: 6px 6px; background-repeat: no-repeat;
+}
+select:focus, input:focus { border-color: var(--main); box-shadow: 0 0 0 3px rgba(var(--main-rgb), 0.25); }
+input.bad { border-color: var(--red); }
+.unit-in { position: relative; }
+.unit-in input { padding-right: 52px; font-family: var(--font-en); font-weight: 500; }
+.unit-in input::placeholder { font-family: var(--font); color: var(--dim); }
+.unit { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+.help { margin: 6px 0 0; color: var(--muted); font-size: 0.8rem; }
+.error { margin: 0 0 14px; padding: 10px 12px; border-radius: var(--radius, 8px); background: rgba(224, 96, 90, 0.12); color: #f2a29c; font-size: 0.9rem; }
+
+.btn {
+  width: 100%;
+  height: 56px;
+  border: 0;
+  border-radius: var(--radius, 8px);
+  background: var(--main);
+  color: var(--ink);
+  font: inherit; font-size: 1.05rem; font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 0 18px 2px rgba(var(--main-rgb), 0.35);
+  transition: transform .1s, filter .2s;
+}
+.btn:hover { filter: brightness(1.08); }
+.btn:active { transform: scale(0.98); }
+.btn:disabled { opacity: .5; cursor: default; }
+
+/* ---------- 結果 ---------- */
+.result { border-color: rgba(var(--main-rgb), 0.5); text-align: center; }
+.r-label { margin: 0; color: var(--muted); font-size: 0.9rem; }
+.r-price { margin: 4px 0 2px; font-family: var(--font-en); font-weight: 700; font-size: clamp(2.4rem, 12vw, 3.2rem); line-height: 1.2; color: var(--main); }
+.r-price small { margin-left: 4px; font-family: var(--font); font-size: 1rem; color: var(--text); }
+.r-sub { margin: 0; color: var(--muted); font-size: 0.82rem; }
+
+.compare { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); }
+.c-head { margin: 0; color: var(--muted); font-size: 0.9rem; }
+.c-head b { color: var(--text); font-family: var(--font-en); font-weight: 500; }
+.c-diff { margin: 6px 0 14px; font-size: 1.15rem; font-weight: 700; }
+.c-diff .num { font-family: var(--font-en); font-weight: 700; }
+.c-diff.high { color: var(--red); }
+.c-diff.low { color: var(--blue); }
+.bar { display: grid; gap: 8px; text-align: left; }
+.bar-row { display: grid; grid-template-columns: 4em 1fr; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--muted); }
+.bar-row i { display: block; height: 12px; border-radius: 99px; background: var(--dim); width: 0; transition: width .5s ease; }
+.bar-row.you i { background: var(--main); }
+@media (prefers-reduced-motion: reduce) { .bar-row i { transition: none; } }
+
+/* ---------- データの表 ---------- */
+.survey { margin: 0 0 12px; color: var(--main); font-weight: 700; font-size: 0.95rem; }
+.tbl-wrap { overflow-x: auto; margin: 0 -4px; }
+table { width: 100%; border-collapse: collapse; font-size: 0.85rem; white-space: nowrap; }
+th, td { padding: 8px 6px; border-bottom: 1px solid var(--line); text-align: right; }
+th { color: var(--muted); font-weight: 400; font-size: 0.75rem; }
+th:first-child, td:first-child { text-align: left; }
+td { font-family: var(--font-en); font-weight: 500; font-size: 0.8rem; }
+td:first-child { font-family: var(--font); font-weight: 700; font-size: 0.85rem; }
+tr.on td { color: var(--main); }
+
+/* ---------- 注意書き ---------- */
+.notice { margin: 8px 0 0; padding: 0 2px; color: var(--muted); font-size: 0.82rem; }
+.notice p { margin: 0 0 8px; }
+.notice b { color: var(--text); }
+
+/* ---------- フッター（ほかの novalis ツールと同じ） ---------- */
+.site-footer { margin-top: 40px; border-top: 1px solid var(--line); overflow: hidden; text-align: center; color: var(--muted); font-size: 0.78rem; }
+.site-footer p { margin: 0 0 6px; padding: 0 16px; }
+.footer-home {
+  position: relative;
+  display: inline-flex; align-items: center; justify-content: center; gap: 24px;
+  min-height: 56px;
+  margin: 32px 0 22px;
+  padding: 0 24px 0 28px;
+  background: var(--main);
+  color: var(--ink);
+  border-radius: var(--radius, 8px);
+  font-size: 0.95rem; font-weight: 900;
+  text-decoration: none;
+  overflow: hidden; isolation: isolate;
+  box-shadow: 0 0 18px 2px rgba(var(--main-rgb), 0.55), 0 0 48px 6px rgba(var(--main-rgb), 0.28);
+}
+.footer-home::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: var(--text);
+  transform: scaleX(0); transform-origin: right;
+  transition: transform .4s cubic-bezier(.7, 0, .2, 1);
+}
+.footer-home:hover::before { transform: scaleX(1); transform-origin: left; }
+.footer-logo {
+  margin: 20px 0 0 !important;
+  font-family: var(--font-en); font-weight: 800;
+  font-size: clamp(2.8rem, 14.5vw, 7rem);
+  line-height: 0.8; letter-spacing: -0.05em; white-space: nowrap;
+  color: transparent;
+  background: repeating-linear-gradient(-55deg, rgba(255, 255, 255, 0.22) 0 2px, transparent 2px 8px);
+  -webkit-background-clip: text; background-clip: text;
+  transform: translateY(12%);
+  user-select: none;
+}

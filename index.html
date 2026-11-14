@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>プロパンガス料金の目安｜愛知・岐阜・三重の平均と比べる【無料】</title>
+  <meta name="description" content="愛知県・岐阜県・三重県のプロパンガス（LPガス）料金の平均的な目安を、使用量（m3）から計算する無料ツール。請求額を入れると、平均との差額と割合もわかります。データは石油情報センターの調査をもとに自動で更新しています。">
+  <link rel="canonical" href="https://novalis-lab.github.io/lpgas-price/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="novalis">
+  <meta property="og:locale" content="ja_JP">
+  <meta property="og:url" content="https://novalis-lab.github.io/lpgas-price/">
+  <meta property="og:title" content="プロパンガス料金の目安｜愛知・岐阜・三重の平均と比べる">
+  <meta property="og:description" content="使用量（m3）を入れるだけで、県の平均的なプロパンガス料金の目安を計算。請求額との差もわかります。">
+  <meta name="twitter:card" content="summary">
+  <meta name="theme-color" content="#0b0b0d">
+  <link rel="icon" href="https://novalis-lab.github.io/icon.svg" type="image/svg+xml">
+  <link rel="icon" href="https://novalis-lab.github.io/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="https://novalis-lab.github.io/apple-touch-icon.png">
+  <link rel="stylesheet" href="https://novalis-lab.github.io/common.css?v=20261113d">
+  <link rel="stylesheet" href="style.css?v=1">
+</head>
+<body>
+  <header class="top">
+    <a class="logo" href="https://novalis-lab.github.io/">NOVALIS</a>
+  </header>
+
+  <main class="wrap">
+    <h1>プロパンガス料金の<br class="sp">目安を計算</h1>
+    <p class="lead">県と使用量を入れると、その県の<b>平均的な料金の目安</b>がわかります。請求額を入れると、平均との差も表示します。</p>
+
+    <form class="card" id="form" novalidate>
+      <div class="fld">
+        <label for="pref"><span class="step">1</span>県を選ぶ</label>
+        <select id="pref" name="pref">
+          <option value="愛知県">愛知県</option>
+          <option value="岐阜県">岐阜県</option>
+          <option value="三重県">三重県</option>
+        </select>
+      </div>
+
+      <div class="fld">
+        <label for="usage"><span class="step">2</span>使用量</label>
+        <div class="unit-in">
+          <input id="usage" name="usage" type="text" inputmode="decimal" autocomplete="off" placeholder="例：13.4" aria-describedby="usage-help">
+          <span class="unit">m<sup>3</sup></span>
+        </div>
+        <p class="help" id="usage-help">検針票の「ご使用量」。小数点第1位まで入れられます。</p>
+      </div>
+
+      <div class="fld">
+        <label for="bill"><span class="step">3</span>あなたの請求額<span class="opt">任意</span></label>
+        <div class="unit-in">
+          <input id="bill" name="bill" type="text" inputmode="numeric" autocomplete="off" placeholder="例：9800" aria-describedby="bill-help">
+          <span class="unit">円</span>
+        </div>
+        <p class="help" id="bill-help">入れると、平均との差額と割合を表示します（税込みの金額）。</p>
+      </div>
+
+      <p class="error" id="error" role="alert" hidden></p>
+      <button class="btn" type="submit" id="calc">計算する</button>
+    </form>
+
+    <section class="card result" id="result" hidden aria-live="polite">
+      <p class="r-label" id="r-label"></p>
+      <p class="r-price"><span id="r-price">0</span><small>円</small></p>
+      <p class="r-sub" id="r-sub"></p>
+
+      <div class="compare" id="compare" hidden>
+        <p class="c-head">あなたの請求額 <b id="c-bill"></b></p>
+        <p class="c-diff" id="c-diff"></p>
+        <div class="bar" aria-hidden="true">
+          <div class="bar-row"><span>平均</span><i id="bar-avg"></i></div>
+          <div class="bar-row you"><span>あなた</span><i id="bar-you"></i></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card table-card">
+      <h2>使っているデータ</h2>
+      <p class="survey" id="survey">データを読み込んでいます…</p>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr><th scope="col">県</th><th scope="col">基本料金</th><th scope="col">5m<sup>3</sup></th><th scope="col">10m<sup>3</sup></th><th scope="col">20m<sup>3</sup></th><th scope="col">50m<sup>3</sup></th></tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+      <p class="help">単位は円（基本料金・消費税込み）。この間の使用量は、となりの点を直線でつないで計算しています。50m<sup>3</sup>を超える分は、20〜50m<sup>3</sup>の増え方で延ばしています。</p>
+    </section>
+
+    <section class="notice">
+      <p><b>平均値からの目安です。実際の料金は契約内容やガス会社によって異なります。</b></p>
+      <p>出典：<a href="https://oil-info.ieej.or.jp/price/price_ippan_lp_gusu.html" target="_blank" rel="noopener">石油情報センター「一般小売価格 LP（プロパン）ガス 確報」</a>（<span id="survey-foot">—</span>）</p>
+      <p>データは週に1回、自動で最新の調査結果を確認しています。</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <a class="footer-home" href="https://novalis-lab.github.io/">ほかのツールも見る<span aria-hidden="true">→</span></a>
+    <p>計算結果は平均値からの目安です。</p>
+    <p class="footer-logo" aria-hidden="true">NOVALIS</p>
+  </footer>
+
+  <script src="app.js?v=1"></script>
+</body>
+</html>
